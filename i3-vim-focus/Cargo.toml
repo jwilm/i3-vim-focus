@@ -1,0 +1,8 @@
+[package]
+name = "i3-vim-focus"
+version = "0.1.0"
+authors = ["Joe Wilm <joe@jwilm.com>"]
+
+[dependencies]
+jwilm-xdo = { version = "0.1.0", git = "https://github.com/jwilm/libxdo-rs" }
+i3ipc = "0.4.2"
