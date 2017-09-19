@@ -3,7 +3,7 @@ name = "i3-vim-focus"
 version = "0.1.0"
 dependencies = [
  "i3ipc 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "jwilm-xdo 0.1.0 (git+https://github.com/jwilm/libxdo-rs)",
+ "jwilm-xdo 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -22,6 +22,11 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "foreign-types"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "i3ipc"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -34,11 +39,12 @@ dependencies = [
 
 [[package]]
 name = "jwilm-xdo"
-version = "0.1.0"
-source = "git+https://github.com/jwilm/libxdo-rs#9f3457db29dad148b0134d48052268ae836c4e53"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
+ "foreign-types 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.20 (registry+https://github.com/rust-lang/crates.io-index)",
- "libxdo-sys 0.10.0 (git+https://github.com/jwilm/rust-libxdo-sys)",
+ "libxdo-sys 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "x11 2.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -54,10 +60,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "libxdo-sys"
-version = "0.10.0"
-source = "git+https://github.com/jwilm/rust-libxdo-sys#5ab48a9f4a783685e923ed2fc3fec5d4204bd9d0"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "libc 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.20 (registry+https://github.com/rust-lang/crates.io-index)",
  "x11 2.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -199,11 +205,12 @@ dependencies = [
 "checksum byteorder 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)" = "29b2aa490a8f546381308d68fc79e6bd753cd3ad839f7a7172897f1feedfa175"
 "checksum debug-builders 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0f5d8e3d14cabcb2a8a59d7147289173c6ada77a0bc526f6b85078f941c0cf12"
 "checksum error-chain 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)" = "318cb3c71ee4cdea69fdc9e15c173b245ed6063e1709029e8fd32525a881120f"
+"checksum foreign-types 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "6d303bf9c8e20c02242ffe4217add748a5b2424cf5955bc399545540fc751c21"
 "checksum i3ipc 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = "bb717ff1dcb9d8950806b7a757b51befc6218471f6350c8bd57ca643fd2b1072"
-"checksum jwilm-xdo 0.1.0 (git+https://github.com/jwilm/libxdo-rs)" = "<none>"
+"checksum jwilm-xdo 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "ad161810191da91d9d9976973f497095ca3fa489bd066f1f12c499ba544f8756"
 "checksum libc 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)" = "e32a70cf75e5846d53a673923498228bbec6a8624708a9ea5645f075d6276122"
 "checksum libc 0.2.20 (registry+https://github.com/rust-lang/crates.io-index)" = "684f330624d8c3784fb9558ca46c4ce488073a8d22450415c5eb4f4cfb0d11b5"
-"checksum libxdo-sys 0.10.0 (git+https://github.com/jwilm/rust-libxdo-sys)" = "<none>"
+"checksum libxdo-sys 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)" = "db23b9e7e2b7831bbd8aac0bbeeeb7b68cbebc162b227e7052e8e55829a09212"
 "checksum metadeps 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "829fffe7ea1d747e23f64be972991bc516b2f1ac2ae4a3b33d8bea150c410151"
 "checksum num 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)" = "bde7c03b09e7c6a301ee81f6ddf66d7a28ec305699e3d3b056d2fc56470e3120"
 "checksum num-bigint 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)" = "88b14378471f7c2adc5262f05b4701ef53e8da376453a8d8fee48e51db745e49"

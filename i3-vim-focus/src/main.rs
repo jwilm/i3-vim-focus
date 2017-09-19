@@ -54,11 +54,15 @@ fn main() {
     let window = xdo.get_active_window().expect("get active x11 window");
     let window_name = window.get_name().expect("get window name");
 
-    if window_name.starts_with("vim") {
+    if window_name.contains("VIM") {
+        let sequence = format!("g+w+{}", direction.to_vim_direction());
+        let mods = xdo.get_active_modifiers().expect("get_active_modifiers");
+        window.clear_active_modifiers(&mods).expect("clear_active_modifiers");
         window.send_keysequence("Escape", None)
             .expect("send escape");
-        window.send_keysequence(&format!("g+w+{}", direction.to_vim_direction()), None)
+        window.send_keysequence(&sequence, None)
             .expect("send gw{}");
+        window.set_active_modifiers(&mods).expect("set_active_modifiers");
     } else {
         let mut conn = i3ipc::I3Connection::connect().expect("connect i3");
         let command = format!("focus {}", name);

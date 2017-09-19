@@ -4,5 +4,5 @@ version = "0.1.0"
 authors = ["Joe Wilm <joe@jwilm.com>"]
 
 [dependencies]
-jwilm-xdo = { version = "0.1.0", git = "https://github.com/jwilm/libxdo-rs" }
+jwilm-xdo = { version = "0.1.1" }
 i3ipc = "0.4.2"
