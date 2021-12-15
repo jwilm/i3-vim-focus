@@ -11,13 +11,23 @@
 extern crate i3ipc;
 extern crate jwilm_xdo as xdo;
 
+use std::env;
+use std::path::PathBuf;
 use std::process::Command;
 use structopt::StructOpt;
 
+fn resolve_vim() -> Option<PathBuf> {
+    let path = env::var("PATH").expect("PATH environment variable not set");
+    path.split(":")
+        .map(|path| PathBuf::from(path).join("vim"))
+        .filter(|p| p.exists())
+        .next()
+}
+
 #[derive(Debug, StructOpt)]
 struct Options {
-    #[structopt(long, help = "specify a vim binary instead of /usr/local/bin/vim")]
-    vim: Option<String>,
+    #[structopt(long, help = "specify a vim binary instead of searching path")]
+    vim: Option<PathBuf>,
 
     #[structopt(subcommand)]
     direction: Direction,
@@ -56,10 +66,8 @@ fn main() {
 
     let vim = options
         .vim
-        .as_ref()
-        .map(|s| &s[..])
-        .unwrap_or("/usr/local/bin/vim");
-
+        .or_else(resolve_vim)
+        .expect("must set --vim or have vim on path");
     let direction = options.direction;
 
     let xdo = xdo::Xdo::new().expect("create xdo");
@@ -80,7 +88,7 @@ fn main() {
                     direction.to_i3_direction(),
                     direction.to_vim_direction()
                 );
-                Command::new(&vim[..]) // XXX hard-coded path
+                Command::new(&vim) // XXX hard-coded path
                     .args(&["--servername", servername, "--remote-expr", &remoteexpr[..]])
                     .output()
                     .expect("ran vim command");
