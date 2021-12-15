@@ -8,15 +8,18 @@
 //!
 //! Requires that libxdo is installed
 
-extern crate jwilm_xdo as xdo;
 extern crate i3ipc;
+extern crate jwilm_xdo as xdo;
 
 use std::env;
-use std::ascii::AsciiExt;
+use std::process::Command;
 use std::str::FromStr;
 
 enum Direction {
-    Up, Left, Down, Right
+    Up,
+    Left,
+    Down,
+    Right,
 }
 
 impl Direction {
@@ -44,9 +47,14 @@ impl FromStr for Direction {
 }
 
 fn main() {
-    let name = env::args().nth(1)
+    let name = env::args()
+        .nth(1)
         .expect("direction was specified")
         .to_ascii_lowercase();
+    let vim = env::args()
+        .nth(2)
+        .map(|v| v.to_ascii_lowercase())
+        .unwrap_or_else(|| "/usr/local/bin/vim".to_string());
 
     let direction = Direction::from_str(&name).unwrap();
 
@@ -57,22 +65,29 @@ fn main() {
         let window_name = window.get_name();
 
         if let Ok(window_name) = window_name {
+            println!("window_name={}", window_name);
 
-            if window_name.contains("VIM") {
-                let sequence = format!("g+w+{}", direction.to_vim_direction());
-                let mods = xdo.get_active_modifiers().expect("get_active_modifiers");
-                window.clear_active_modifiers(&mods).expect("clear_active_modifiers");
-                window.send_keysequence("Escape", None)
-                    .expect("send escape");
-                window.send_keysequence(&sequence, None)
-                    .expect("send gw{}");
-                window.set_active_modifiers(&mods).expect("set_active_modifiers");
+            if let Some(idx) = window_name.find("VIM:") {
+                // by default, the server name appears at the end of the window title. By
+                // convention, the server name starts with VIM:.
+                let servername = &window_name[idx..];
+                let remoteexpr = format!(
+                    "execute(\"call Focus('{}', '{}')<CR>\")",
+                    name,
+                    direction.to_vim_direction()
+                );
+                Command::new(&vim[..]) // XXX hard-coded path
+                    .args(&["--servername", servername, "--remote-expr", &remoteexpr[..]])
+                    .output()
+                    .expect("ran vim command");
+
                 return;
             }
         }
     }
+
     let mut conn = i3ipc::I3Connection::connect().expect("connect i3");
     let command = format!("focus {}", name);
     println!("sending command: {}", command);
-    conn.command(&command).expect("send i3 message");
+    conn.run_command(&command).expect("send i3 message");
 }

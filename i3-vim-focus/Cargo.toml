@@ -5,4 +5,4 @@ authors = ["Joe Wilm <joe@jwilm.com>"]
 
 [dependencies]
 jwilm-xdo = { version = "0.1.1" }
-i3ipc = "0.4.2"
+i3ipc = "0.10"
