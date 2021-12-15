@@ -1,6 +1,6 @@
 [package]
 name = "i3-vim-focus"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2018"
 authors = ["Joe Wilm <joe@jwilm.com>"]
 
