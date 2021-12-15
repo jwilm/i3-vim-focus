@@ -11,10 +11,19 @@
 extern crate i3ipc;
 extern crate jwilm_xdo as xdo;
 
-use std::env;
 use std::process::Command;
-use std::str::FromStr;
+use structopt::StructOpt;
 
+#[derive(Debug, StructOpt)]
+struct Options {
+    #[structopt(long, help = "specify a vim binary instead of /usr/local/bin/vim")]
+    vim: Option<String>,
+
+    #[structopt(subcommand)]
+    direction: Direction,
+}
+
+#[derive(Debug, StructOpt, Copy, Clone)]
 enum Direction {
     Up,
     Left,
@@ -31,32 +40,27 @@ impl Direction {
             Direction::Right => "l",
         }
     }
-}
 
-impl FromStr for Direction {
-    type Err = &'static str;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(match s {
-            "left" => Direction::Left,
-            "right" => Direction::Right,
-            "up" => Direction::Up,
-            "down" => Direction::Down,
-            _ => return Err("must specify one of left, right, up, or down"),
-        })
+    pub fn to_i3_direction(&self) -> &'static str {
+        match *self {
+            Direction::Up => "up",
+            Direction::Down => "down",
+            Direction::Left => "left",
+            Direction::Right => "right",
+        }
     }
 }
 
 fn main() {
-    let name = env::args()
-        .nth(1)
-        .expect("direction was specified")
-        .to_ascii_lowercase();
-    let vim = env::args()
-        .nth(2)
-        .map(|v| v.to_ascii_lowercase())
-        .unwrap_or_else(|| "/usr/local/bin/vim".to_string());
+    let options = Options::from_args();
 
-    let direction = Direction::from_str(&name).unwrap();
+    let vim = options
+        .vim
+        .as_ref()
+        .map(|s| &s[..])
+        .unwrap_or("/usr/local/bin/vim");
+
+    let direction = options.direction;
 
     let xdo = xdo::Xdo::new().expect("create xdo");
     let window = xdo.get_active_window();
@@ -73,7 +77,7 @@ fn main() {
                 let servername = &window_name[idx..];
                 let remoteexpr = format!(
                     "execute(\"call Focus('{}', '{}')<CR>\")",
-                    name,
+                    direction.to_i3_direction(),
                     direction.to_vim_direction()
                 );
                 Command::new(&vim[..]) // XXX hard-coded path
@@ -87,7 +91,7 @@ fn main() {
     }
 
     let mut conn = i3ipc::I3Connection::connect().expect("connect i3");
-    let command = format!("focus {}", name);
+    let command = format!("focus {}", direction.to_i3_direction());
     println!("sending command: {}", command);
     conn.run_command(&command).expect("send i3 message");
 }
