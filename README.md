@@ -25,15 +25,5 @@ bindsym --release $mod+k exec --no-startup-id "i3-vim-focus up"
 bindsym --release $mod+l exec --no-startup-id "i3-vim-focus right"
 ```
 
-Note that if your vim installation is not at `/usr/local/bin/vim`, you'll need
-to add another argument to `i3-vim-focus` to indicate the path. For example,
-
-```
-bindsym --release $mod+h exec --no-startup-id "i3-vim-focus left  /usr/bin/vim"
-bindsym --release $mod+j exec --no-startup-id "i3-vim-focus down  /usr/bin/vim"
-bindsym --release $mod+k exec --no-startup-id "i3-vim-focus up    /usr/bin/vim"
-bindsym --release $mod+l exec --no-startup-id "i3-vim-focus right /usr/bin/vim"
-```
-
 Finally, this project needs to be installed as a vim plugin using
 something like pathogen.
