@@ -6,22 +6,33 @@ Allows i3 direction keys to control vim splits and i3 windows seamlessly
 The `i3-vim-focus` folder has a Rust program that should be installed on the
 user's path. It can be build with `cargo build --release`.
 
-The following should be added to your `~/.vimrc`
+No changes are necessary to the .vimrc.
 
-```viml
-map gwl :call Focus('right', 'l')<CR>
-map gwh :call Focus('left', 'h')<CR>
-map gwk :call Focus('up', 'k')<CR>
-map gwj :call Focus('down', 'j')<CR>
+Every instance of vim must be launched with a `--servername` argument that
+starts with `VIM:` and must be unique. One way to do achieve this is by using an
+alias for vim, like so:
+
+```bash
+alias vim='/usr/local/bin/vim --servername "VIM:$RANDOM"'
 ```
 
 The i3 config needs to be updated with the following bindings.
 
 ```
-bindsym --release $mod+h exec "i3-vim-focus left"
-bindsym --release $mod+j exec "i3-vim-focus down"
-bindsym --release $mod+k exec "i3-vim-focus up"
-bindsym --release $mod+l exec "i3-vim-focus right"
+bindsym --release $mod+h exec --no-startup-id "i3-vim-focus left"
+bindsym --release $mod+j exec --no-startup-id "i3-vim-focus down"
+bindsym --release $mod+k exec --no-startup-id "i3-vim-focus up"
+bindsym --release $mod+l exec --no-startup-id "i3-vim-focus right"
+```
+
+Note that if your vim installation is not at `/usr/local/bin/vim`, you'll need
+to add another argument to `i3-vim-focus` to indicate the path. For example,
+
+```
+bindsym --release $mod+h exec --no-startup-id "i3-vim-focus left  /usr/bin/vim"
+bindsym --release $mod+j exec --no-startup-id "i3-vim-focus down  /usr/bin/vim"
+bindsym --release $mod+k exec --no-startup-id "i3-vim-focus up    /usr/bin/vim"
+bindsym --release $mod+l exec --no-startup-id "i3-vim-focus right /usr/bin/vim"
 ```
 
 Finally, this project needs to be installed as a vim plugin using
